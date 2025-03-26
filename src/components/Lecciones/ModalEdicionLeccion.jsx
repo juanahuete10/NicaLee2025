@@ -1,13 +1,16 @@
 import React from "react";
-import { Modal, Form, Button } from "react-bootstrap";
+import { Modal, Form, Button, Image } from "react-bootstrap";
 
+// Componente Modal de Edición de Lección
 const ModalEdicionLeccion = ({
   showEditModal,
   setShowEditModal,
   leccionEditada,
   handleEditInputChange,
+  handleEditImageChange,
   handleEditLeccion,
 }) => {
+  // Verificamos si leccionEditada existe y tiene los datos necesarios
   if (!leccionEditada) return null;
 
   return (
@@ -17,55 +20,73 @@ const ModalEdicionLeccion = ({
       </Modal.Header>
       <Modal.Body>
         <Form>
+          {/* Título */}
           <Form.Group className="mb-3">
             <Form.Label>Título</Form.Label>
             <Form.Control
               type="text"
-              name="titulo"
-              value={leccionEditada.titulo}
+              name="tituloLeccion"
+              value={leccionEditada.tituloLeccion || ""}
               onChange={handleEditInputChange}
-              placeholder="Ingresa el título de la lección"
             />
           </Form.Group>
+
+          {/* Nivel */}
+          <Form.Group className="mb-3">
+            <Form.Label>Nivel</Form.Label>
+            <Form.Control
+              type="text"
+              name="nivel"
+              value={leccionEditada.nivel || ""}
+              onChange={handleEditInputChange}
+            />
+          </Form.Group>
+
+          {/* Contenido */}
           <Form.Group className="mb-3">
             <Form.Label>Contenido</Form.Label>
             <Form.Control
               as="textarea"
               rows={3}
               name="contenido"
-              value={leccionEditada.contenido}
+              value={leccionEditada.contenido || ""}
               onChange={handleEditInputChange}
-              placeholder="Ingresa el contenido de la lección"
             />
           </Form.Group>
+
+          {/* Ejercicios */}
           <Form.Group className="mb-3">
-            <Form.Label>Nivel</Form.Label>
+            <Form.Label>Ejercicios</Form.Label>
             <Form.Control
-              type="text"
-              name="nivel"
-              value={leccionEditada.nivel}
+              as="textarea"
+              rows={3}
+              name="ejercicios"
+              value={leccionEditada.ejercicios || ""}
               onChange={handleEditInputChange}
-              placeholder="Ingresa el nivel educativo"
             />
           </Form.Group>
+
+          {/* Fecha de Publicación */}
           <Form.Group className="mb-3">
-            <Form.Label>Categoría</Form.Label>
+            <Form.Label>Fecha de Publicación</Form.Label>
             <Form.Control
-              type="text"
-              name="categoria"
-              value={leccionEditada.categoria}
+              type="date"
+              name="fechaPublicacion"
+              value={leccionEditada.fechaPublicacion || ""}
               onChange={handleEditInputChange}
-              placeholder="Ingresa la categoría"
             />
           </Form.Group>
+
+          {/* Imagen Actual */}
           <Form.Group className="mb-3">
-            <Form.Label>Recursos</Form.Label>
+            <Form.Label>Imagen Actual</Form.Label>
+            {leccionEditada.imagen && (
+              <Image src={leccionEditada.imagen} width="100" className="mb-2" />
+            )}
             <Form.Control
-              type="text"
-              name="recursos"
-              value={leccionEditada.recursos}
-              onChange={handleEditInputChange}
-              placeholder="Ingresa enlaces a recursos adicionales"
+              type="file"
+              accept="image/*"
+              onChange={handleEditImageChange}
             />
           </Form.Group>
         </Form>

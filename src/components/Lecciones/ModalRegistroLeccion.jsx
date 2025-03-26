@@ -1,129 +1,144 @@
-import React, { useState } from "react";
-import { Modal, Button, Form } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Modal, Form, Button } from "react-bootstrap";
 
-// Función que manejará el agregar lección (Simulamos la función con Firebase o similar)
-const agregarLeccion = async (nuevaLeccion) => {
-  try {
-    // Aquí puedes agregar la lógica para guardar la lección en Firebase Firestore o cualquier otra base de datos
-    console.log("Guardando lección:", nuevaLeccion);
-    // Ejemplo de lógica con Firestore (si estuvieras usando Firestore):
-    // await firestore.collection("lecciones").add(nuevaLeccion);
-    alert("Lección guardada correctamente");
-  } catch (error) {
-    console.error("Error al guardar la lección:", error);
-    alert("Error al guardar la lección.");
+// Función para convertir un Timestamp de Firebase a una fecha legible (YYYY-MM-DD)
+const convertirTimestampAFecha = (timestamp) => {
+  if (timestamp && timestamp.seconds) {
+    const date = new Date(timestamp.seconds * 1000);
+    return date.toISOString().split("T")[0]; // Convertir a formato 'YYYY-MM-DD'
   }
+  return ""; // Retorna una cadena vacía si no es un Timestamp válido
 };
 
-const ModalRegistroLeccion = ({ show, handleClose }) => {
-  const [nuevaLeccion, setNuevaLeccion] = useState({
-    id_leccion: "", // Se puede generar automáticamente si es necesario
-    tituloLeccion: "",
-    nivel: "",
-    contenido: "",
-    ejercicios: "",
-    fechaPublicacion: "",
-  });
+const ModalRegistroLeccion = ({
+  showModal,
+  setShowModal,
+  nuevaLeccion,
+  handleInputChange,
+  handleImageChange,
+  handleAddLeccion
+}) => {
+  // Este estado maneja el estado local del modal.
+  const [localShowModal, setLocalShowModal] = useState(showModal);
 
-  const handleChange = (e) => {
-    setNuevaLeccion({ ...nuevaLeccion, [e.target.name]: e.target.value });
-  };
+  // Sincronizar el estado `showModal` con el estado local
+  useEffect(() => {
+    setLocalShowModal(showModal);
+  }, [showModal]);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const { tituloLeccion, nivel, contenido, ejercicios, fechaPublicacion } = nuevaLeccion;
+  // Asegúrate de que el campo "fechaPublicacion" siempre esté en el formato adecuado
+  const [fechaPublicacion, setFechaPublicacion] = useState(
+    nuevaLeccion?.fechaPublicacion
+      ? convertirTimestampAFecha(nuevaLeccion.fechaPublicacion)
+      : ""
+  );
 
-    if (!tituloLeccion.trim() || !nivel.trim() || !contenido.trim() || !ejercicios.trim() || !fechaPublicacion.trim()) {
-      alert("Todos los campos son obligatorios.");
-      return;
-    }
-
-    // Llamamos a la función para agregar la lección
-    await agregarLeccion(nuevaLeccion);
-
-    // Limpiar los campos del formulario
-    setNuevaLeccion({
-      id_leccion: "",
-      tituloLeccion: "",
-      nivel: "",
-      contenido: "",
-      ejercicios: "",
-      fechaPublicacion: "",
+  // Función para manejar el cambio de la fecha
+  const handleDateChange = (event) => {
+    const selectedDate = event.target.value;
+    setFechaPublicacion(selectedDate); // Actualizamos el estado local
+    handleInputChange({
+      target: {
+        name: "fechaPublicacion",
+        value: selectedDate // La fecha seleccionada en formato 'YYYY-MM-DD'
+      }
     });
-
-    // Cerrar el modal
-    handleClose();
   };
+
+  // Niveles predefinidos
+  const niveles = [
+    "Preescolar",
+    "Primero",
+    "Segundo",
+    "Tercero",
+    "Cuarto",
+    "Quinto",
+    "Sexto"
+  ];
 
   return (
-    <Modal show={show} onHide={handleClose}>
+    <Modal show={localShowModal} onHide={() => setShowModal(false)}>
       <Modal.Header closeButton>
-        <Modal.Title>Registrar Nueva Lección</Modal.Title>
+        <Modal.Title>Agregar Lección</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={handleSubmit}>
+        <Form>
           <Form.Group className="mb-3">
             <Form.Label>Título de la Lección</Form.Label>
             <Form.Control
               type="text"
               name="tituloLeccion"
-              value={nuevaLeccion.tituloLeccion}
-              onChange={handleChange}
+              value={nuevaLeccion?.tituloLeccion || ""}
+              onChange={handleInputChange}
               required
             />
           </Form.Group>
-
           <Form.Group className="mb-3">
             <Form.Label>Nivel</Form.Label>
-            <Form.Select name="nivel" value={nuevaLeccion.nivel} onChange={handleChange} required>
+            <Form.Select
+              name="nivel"
+              value={nuevaLeccion?.nivel || ""}
+              onChange={handleInputChange}
+              required
+            >
               <option value="">Seleccione un nivel</option>
-              <option value="Preescolar">Preescolar</option>
-              <option value="Primero">Primero</option>
-              <option value="Segundo">Segundo</option>
-              <option value="Tercero">Tercero</option>
-              <option value="Cuarto">Cuarto</option>
-              <option value="Quinto">Quinto</option>
+              {niveles.map((nivel, index) => (
+                <option key={index} value={nivel}>
+                  {nivel}
+                </option>
+              ))}
             </Form.Select>
           </Form.Group>
-
-          <Form.Group className="mb-3">
-            <Form.Label>Contenido</Form.Label>
-            <Form.Control
-              as="textarea"
-              name="contenido"
-              value={nuevaLeccion.contenido}
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
-
-          <Form.Group className="mb-3">
-            <Form.Label>Ejercicios</Form.Label>
-            <Form.Control
-              as="textarea"
-              name="ejercicios"
-              value={nuevaLeccion.ejercicios}
-              onChange={handleChange}
-              required
-            />
-          </Form.Group>
-
           <Form.Group className="mb-3">
             <Form.Label>Fecha de Publicación</Form.Label>
             <Form.Control
               type="date"
               name="fechaPublicacion"
-              value={nuevaLeccion.fechaPublicacion}
-              onChange={handleChange}
+              value={fechaPublicacion} // Usamos el estado actualizado
+              onChange={handleDateChange} // Usamos la nueva función para manejar el cambio
               required
             />
           </Form.Group>
-
-          <Button variant="primary" type="submit">
-            Guardar
-          </Button>
+          <Form.Group className="mb-3">
+            <Form.Label>Contenido</Form.Label>
+            <Form.Control
+              as="textarea"
+              rows={3}
+              name="contenido"
+              value={nuevaLeccion?.contenido || ""}
+              onChange={handleInputChange}
+              required
+            />
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Ejercicios</Form.Label>
+            <Form.Control
+              as="textarea"
+              rows={3}
+              name="ejercicios"
+              value={nuevaLeccion?.ejercicios || ""}
+              onChange={handleInputChange}
+              required
+            />
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label>Imagen</Form.Label>
+            <Form.Control
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+            />
+          </Form.Group>
         </Form>
       </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={() => setShowModal(false)}>
+          Cancelar
+        </Button>
+        <Button variant="primary" onClick={handleAddLeccion}>
+          Guardar
+        </Button>
+      </Modal.Footer>
     </Modal>
   );
 };
