@@ -4,7 +4,7 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Offcanvas from "react-bootstrap/Offcanvas";
-import logo from "../assets/react.svg";
+import LogoNicaLee from "../assets/LogoNicaLee.png";
 import { useAuth } from "../database/AuthContext";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "../App.css";
@@ -37,8 +37,8 @@ const Encabezado = () => {
   return (
     <Navbar expand="sm" fixed="top" className="color-navbar">
       <Container>
-        <Navbar.Brand onClick={() => handleNavigate("/inicio")} className="text-white" style={{ cursor: "pointer" }}>
-          <img alt="" src={logo} width="30" height="30" className="d-inline-block align-top" />{" "}
+        <Navbar.Brand onClick={() => handleNavigate("/inicionicalee")} className="text-white" style={{ cursor: "pointer" }}>
+          <img alt="" src={LogoNicaLee} width="30" height="30" className="d-inline-block align-top" />{" "}
           <strong>NicaLee</strong>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="offcanvasNavbar-expand-sm" onClick={handleToggle} />
@@ -54,9 +54,9 @@ const Encabezado = () => {
           </Offcanvas.Header>
           <Offcanvas.Body>
             <Nav className="justify-content-end flex-grow-1 pe-3">
-              <Nav.Link onClick={() => handleNavigate("/inicio")} className={isCollapsed ? "color-texto-marca" : "text-white"}>
+              <Nav.Link onClick={() => handleNavigate("/inicionicalee")} className={isCollapsed ? "color-texto-marca" : "text-white"}>
                 {isCollapsed ? <i className="bi-house-door-fill me-2"></i> : null}
-                <strong>Inicio</strong>
+                <strong>Inicio Nica Lee</strong>
               </Nav.Link>
 
               {isLoggedIn ? (
