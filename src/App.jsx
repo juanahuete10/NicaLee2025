@@ -8,6 +8,7 @@ import Registro from "./components/Registro";
 import Lecciones from "./views/Lecciones";
 import LeccionesCatalogo from "./views/LeccionesCatalogo";
 import EstudianteFormularios from "./components/Formularios/EstudianteFormularios";
+import EstudianteDashboard from "./components/Formularios/EstudianteDashboard";
 
 
 
@@ -30,6 +31,7 @@ function App() {
                 <Route path="/login" element={<Login />} /> 
                 <Route path="/leccionescatalogo" element={<ProtectedRoute element={<LeccionesCatalogo />} />} />
                 <Route path="/estudianteformularios" element={<ProtectedRoute element={<EstudianteFormularios />} />} />
+                <Route path="/dashboard" element={<EstudianteDashboard />} />
               </Routes>
             </main>
           </div>
