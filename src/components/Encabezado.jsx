@@ -65,6 +65,10 @@ const Encabezado = () => {
                     {isCollapsed ? <i className="bi-book me-2"></i> : null}
                     <strong>Leccion</strong>
                   </Nav.Link>
+                  
+                  <Nav.Link onClick={() => handleNavigate("/estudianteformularios")} className="text-black">
+                <strong>Registro Estudiante</strong>
+              </Nav.Link>
 
                   <Nav.Link onClick={() => handleNavigate("/leccionescatalogo")} className={isCollapsed ? "color-texto-marca" : "text-white"}>
                     {isCollapsed ? <i className="bi-book me-2"></i> : null}
