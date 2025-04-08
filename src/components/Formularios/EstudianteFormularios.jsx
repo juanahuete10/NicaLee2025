@@ -12,7 +12,6 @@ const EstudianteFormularios = () => {
   const [ubicacion, setUbicacion] = useState('');
   const [genero, setGenero] = useState('');
   const [imagen, setImagen] = useState(null);
-  const [registros, setRegistros] = useState([]);
 
   const navigate = useNavigate();
 
@@ -33,7 +32,7 @@ const EstudianteFormularios = () => {
       alert('Por favor, completa todos los campos obligatorios.');
       return;
     }
-
+  
     const estudiante = {
       id: Date.now(),
       nombre,
@@ -46,14 +45,12 @@ const EstudianteFormularios = () => {
       genero,
       imagen,
     };
-
-    setRegistros([...registros, estudiante]);
-
-    alert('¡Estudiante registrado con éxito!');
-
-    // Redirigir al Dashboard y pasar datos
+  
+    console.log(estudiante); // Imprimir el objeto para asegurarnos de que tiene los datos correctos
+  
+    // Navega al dashboard del estudiante después de completar el registro
     navigate('/dashboard', { state: { estudiante } });
-
+  
     // Limpiar campos
     setNombre('');
     setApellido('');
@@ -65,6 +62,7 @@ const EstudianteFormularios = () => {
     setGenero('');
     setImagen(null);
   };
+  
 
   return (
     <GradientContainer>
@@ -84,7 +82,7 @@ const EstudianteFormularios = () => {
         <InputField type="text" placeholder="Apellidos" value={apellido} onChange={(e) => setApellido(e.target.value)} />
         <InputField type="number" placeholder="Edad" value={edad} onChange={(e) => setEdad(e.target.value)} />
 
-        <SelectField value={grado} onChange={(e) => setGrado(e.target.value)}>
+        <SelectField value={grado} onChange={(e) => setGrado(e.target.value)} >
           <option value="">Selecciona el grado</option>
           <option value="Primero">Primero</option>
           <option value="Segundo">Segundo</option>
@@ -94,7 +92,7 @@ const EstudianteFormularios = () => {
           <option value="Sexto">Sexto</option>
         </SelectField>
 
-        <SelectField value={nivelEducativo} onChange={(e) => setNivelEducativo(e.target.value)}>
+        <SelectField value={nivelEducativo} onChange={(e) => setNivelEducativo(e.target.value)} >
           <option value="">Selecciona el nivel educativo</option>
           <option value="Primaria">Primaria</option>
           <option value="Secundaria">Secundaria</option>
@@ -106,35 +104,13 @@ const EstudianteFormularios = () => {
         <InputField type="text" placeholder="Ubicación" value={ubicacion} onChange={(e) => setUbicacion(e.target.value)} />
 
         {/* Cambio de género a un campo de selección */}
-        <SelectField value={genero} onChange={(e) => setGenero(e.target.value)}>
+        <SelectField value={genero} onChange={(e) => setGenero(e.target.value)} >
           <option value="">Selecciona tu género</option>
           <option value="Masculino">Masculino</option>
           <option value="Femenino">Femenino</option>
         </SelectField>
 
         <StyledButton onClick={handleRegistro}>Registrar Estudiante</StyledButton>
-
-        <hr />
-
-        <h3>Estudiantes Registrados</h3>
-        {registros.length === 0 ? (
-          <p>No hay estudiantes registrados aún.</p>
-        ) : (
-          registros.map((estudiante) => (
-            <EstudianteCard key={estudiante.id}>
-              <img src={estudiante.imagen} alt="Estudiante" />
-              <div>
-                <p><strong>Nombre:</strong> {estudiante.nombre} {estudiante.apellido}</p>
-                <p><strong>Edad:</strong> {estudiante.edad}</p>
-                <p><strong>Género:</strong> {estudiante.genero}</p>
-                <p><strong>Grado:</strong> {estudiante.grado}</p>
-                <p><strong>Nivel Educativo:</strong> {estudiante.nivelEducativo}</p>
-                <p><strong>Ubicación:</strong> {estudiante.ubicacion}</p>
-                <p><strong>Intereses:</strong> {estudiante.intereses}</p>
-              </div>
-            </EstudianteCard>
-          ))
-        )}
       </div>
     </GradientContainer>
   );
@@ -161,28 +137,6 @@ const SelectField = styled.select`
   margin: 10px 0;
   padding: 8px;
   width: 100%;
-`;
-
-const EstudianteCard = styled.div`
-  display: flex;
-  align-items: center;
-  background-color: #fff;
-  margin: 15px 0;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-
-  img {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-    margin-right: 15px;
-    object-fit: cover;
-  }
-
-  p {
-    margin: 5px 0;
-  }
 `;
 
 // 🎨 Botón centrado estilizado

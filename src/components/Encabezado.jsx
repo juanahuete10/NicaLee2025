@@ -70,6 +70,14 @@ const Encabezado = () => {
                 <strong>Registro Estudiante</strong>
               </Nav.Link>
 
+
+              <Nav.Link onClick={() => handleNavigate("/verperfilestudiantes")} className="text-black">
+                <strong>Perfil Estudiante</strong>
+              </Nav.Link>
+
+
+
+
                   <Nav.Link onClick={() => handleNavigate("/leccionescatalogo")} className={isCollapsed ? "color-texto-marca" : "text-white"}>
                     {isCollapsed ? <i className="bi-book me-2"></i> : null}
                     <strong>Lecciones</strong>
